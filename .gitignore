@@ -1,18 +1,29 @@
-*/config/development
-*/logs/log-*.php
-!*/logs/index.html
-*/cache/*
-!system/cache/*
-!*/cache/index.html
-!*/cache/.htaccess
+# Ignore system/environment config files
+.env
 
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
+# Ignore writable directory
+/writable/*
 
-#codeigniter 3
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
-/vendor/
+# Ignore log files and other temporary files
+/logs/*
+/cache/*
+/debugbar/*
+
+# Ignore generated vendor files
+/vendor/*
+
+# Ignore Composer dependencies
+composer.lock
+
+# Ignore IDE and OS specific files
+/.idea
+*.DS_Store
+*.swp
+*.swo
+*.bak
+*.tmp
+*.~*
+
+# Ignore CodeIgniter cache and logs (if not using writable folder structure)
+/application/cache/*
+/application/logs/*
