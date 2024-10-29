@@ -70,7 +70,7 @@ function aboutdetails()
         'sitedetails' => [
             'Name' => "Streamdex",
             'Org' => "Dex Corp",
-            'Link' => "https://github.com/Subhendu1987/StreamDex/blob/main/README.md"
+            'Link' => "https://subhendu1987.github.io/DexCorp/"
         ],
         'version' => "1.0.1 (beta)"
 
