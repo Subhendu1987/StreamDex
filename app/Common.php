@@ -64,15 +64,15 @@ function aboutdetails()
             'Link' => "support@streamdex.com"
         ],
         'ytdetails' => [
-            'Name' => "Your Channel",
-            'Link' => "https://www.youtube.com/your-channel-link"
+            'Name' => "Subho Codes",
+            'Link' => "https://www.youtube.com/@subhocodes"
         ],
         'sitedetails' => [
             'Name' => "Streamdex",
             'Org' => "Dex Corp",
-            'Link' => "https://www.dexcorp.com"
+            'Link' => "https://github.com/Subhendu1987/StreamDex/blob/main/README.md"
         ],
-        'version' => "0.1.2 (beta)"
+        'version' => "1.0.1 (beta)"
 
     ];
     
