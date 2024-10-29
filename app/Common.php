@@ -56,8 +56,8 @@ function aboutdetails()
 {
     $adt = [
         'gitdetails' => [
-            'Name' => "GitHub - Streamdex",
-            'Link' => "https://github.com/your-repo-link"
+            'Name' => "Streamdex",
+            'Link' => "https://github.com/Subhendu1987/StreamDex"
         ],
         'emaildetails' => [
             'Name' => "Streamdex",
