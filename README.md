@@ -173,7 +173,17 @@ To install StreamDex, follow these steps:
 
 ## Alternative Installation via Docker
 
-*Coming soon: Instructions for Docker installation will be provided here.*
+For quick setup, you can use the official Docker image available on Docker Hub.
+
+1. **Pull the Docker Image**
+   ```bash
+   docker pull dexcorp/streamdex
+   ```
+
+2. **Run the Docker Container**
+   ```bash
+   docker run -d -p 80:80 -p 1935:1935 --name streamdex-container dexcorp/streamdex
+   ```
 
 ## License
 
