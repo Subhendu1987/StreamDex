@@ -27,3 +27,6 @@ composer.lock
 # Ignore CodeIgniter cache and logs (if not using writable folder structure)
 /application/cache/*
 /application/logs/*
+
+# Ignore this .gitignore file
+.gitignore
