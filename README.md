@@ -177,9 +177,9 @@ For quick setup, you can use the official Docker image available on Docker Hub.
 
 ## Prerequisite: Install Docker (if not already installed)
 
-1. **Pull the Docker Image**
+1. **Prerequisite: Install Docker (if not already installed)**
    ```bash
-   docker pull dexcorp/streamdex
+   apt install docker.io -y
    ```
 
 1. **Pull the Docker Image**
