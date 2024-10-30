@@ -177,11 +177,16 @@ For quick setup, you can use the official Docker image available on Docker Hub.
 
 ## Prerequisite: Install Docker (if not already installed)
 
-**Prerequisite: Install Docker (if not already installed)**
-   ```bash
-   apt install docker.io -y
-   ```
+10. **Configure Nginx for RTMP streaming:**
+    ```bash
+    sudo chown www-data:www-data /etc/nginx/nginx.conf
+    sudo chmod 664 /etc/nginx/nginx.conf
+    ```
 
+    Prerequisite: Install Docker (if not already installed)
+    ```bash
+    apt install docker.io -y
+    ```
 1. **Pull the Docker Image**
    ```bash
    docker pull dexcorp/streamdex
