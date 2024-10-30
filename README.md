@@ -174,7 +174,7 @@ To install StreamDex, follow these steps:
 ## Alternative Installation via Docker
 
 For quick setup, you can use the official Docker image available on Docker Hub.
-**Install docker if not Installed**
+   **Install docker if not Installed**
    ```bash
    apt install docker.io -y
    ```
