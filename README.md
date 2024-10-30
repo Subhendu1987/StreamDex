@@ -177,7 +177,7 @@ For quick setup, you can use the official Docker image available on Docker Hub.
 
 ## Prerequisite: Install Docker (if not already installed)
 
-1. **Prerequisite: Install Docker (if not already installed)**
+**Prerequisite: Install Docker (if not already installed)**
    ```bash
    apt install docker.io -y
    ```
