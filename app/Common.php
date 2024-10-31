@@ -72,7 +72,7 @@ function aboutdetails()
             'Org' => "Dex Corp",
             'Link' => "https://www.dexcorp.com"
         ],
-        'version' => "0.1.2 (beta)"
+        'version' => "1.1.2 (beta)"
 
     ];
     
