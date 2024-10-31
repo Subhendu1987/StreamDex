@@ -1,4 +1,45 @@
 #!/bin/bash
+#
+#           StreamDex Installer Script v1.0.0
+#   GitHub: https://github.com/Subhendu1987/StreamDex
+#   Issues: https://github.com/Subhendu1987/StreamDex/issues
+#   Requires: bash, mv, rm, curl/wget, nginx, php8.1, ffmpeg
+#
+#   This script installs StreamDex to your system.
+#   Usage:
+#
+#       $ wget -qO- https://raw.githubusercontent.com/Subhendu1987/StreamDex/main/install.sh | bash
+#         or
+#       $ curl -fsSL https://raw.githubusercontent.com/Subhendu1987/StreamDex/main/install.sh | bash
+#
+#   This only works on Debian-based Linux systems. Please
+#   open an issue if you notice any bugs.
+#
+
+clear
+echo -e "\e[0m\c"
+
+# shellcheck disable=SC2016
+echo '
+_       ___        __     ___        ______  _____          _     ___        __   ____   _
+ )  ____) (__    __) |    \  \    ___)    /  \    |        | |    \  \    ___) \  \  /  / 
+(  (___      |  |    |     )  |  (__     /    \   |  |\/|  | |     |  |  (__    \  \/  /  
+ \___  \     |  |    |    /   |   __)   /  ()  \  |  |  |  | |     |  |   __)    >    <   
+ ____)  )    |  |    | |\ \   |  (___  |   __   | |  |  |  | |     |  |  (___   /  /\  \  
+(      (_____|  |____| |_\ \_/       )_|  (__)  |_|  |__|  |_|    /__/       )_/  /__\  \_
+
+   --- Created by Love for YOU ---
+'
+export PATH=/usr/sbin:$PATH
+export DEBIAN_FRONTEND=noninteractive
+
+set -e
+
+###############################################################################
+# GLOBALS                                                                     #
+###############################################################################
+
+
 
 # Update and upgrade the package list
 echo "Updating package list and upgrading existing packages..."
