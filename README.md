@@ -91,7 +91,7 @@ To install StreamDex, follow these steps:
 8. **Set writable permissions:**
    ```bash
    sudo chmod -R 777 /var/www/html/writable
-   sudo chmod -R 777 /var/www/html/.env
+   sudo chmod -R 777 /var/www/html/.env 
    ```
 
 9. **Install the RTMP module for Nginx:**
