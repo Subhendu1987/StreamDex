@@ -24,11 +24,9 @@ echo "
    _____ _                            _____            
   / ____| |                          |  __ \           
  | (___ | |_ _ __ ___  __ _ _ __ ___ | |  | | _____  __ 
-  \___ \| __|  __/ _ \/ _  |  _   _  | |  | |/ _ \ \/ / 
+  \___ \| __| |__/ _ \/ _  |  _   _ \| |  | |/ _ \ \/ / 
   ____) | |_| | |  __/ (_| | | | | | | |__| |  __/>  <  
  |_____/ \__|_|  \___|\__,_|_| |_| |_|_____/ \___/_/\_\ 
-
-
    --- Created with Love for YOU ---
 "
 export PATH=/usr/sbin:$PATH
@@ -39,8 +37,6 @@ set -e
 ###############################################################################
 # GLOBALS                                                                     #
 ###############################################################################
-
-
 
 # Update and upgrade the package list
 echo "Updating package list and upgrading existing packages..."
@@ -93,7 +89,11 @@ EOL
 
 # Restart Nginx
 echo "Restarting Nginx..."
-sudo systemctl restart nginx
+if command -v systemctl > /dev/null; then    
+    sudo systemctl restart nginx
+else
+    sudo service nginx restart
+fi
 
 # Clone the StreamDex repository
 echo "Cloning StreamDex repository..."
@@ -171,13 +171,13 @@ rtmp {
 }
 EOL
 
-# Check if systemctl is available
+# Restart Nginx again
+echo "Restarting Nginx again..."
 if command -v systemctl > /dev/null; then    
     sudo systemctl restart nginx
 else
     sudo service nginx restart
 fi
-echo "Restarting Nginx ..."
 
 # Retrieve the local IP address
 LOCAL_IP=$(hostname -I | awk '{print $1}')
@@ -188,4 +188,3 @@ echo "Installation complete!"
 echo "Access the StreamDex application at: http://$LOCAL_IP"
 echo "Default Username: admin"
 echo "Default Password: 123456"
-
