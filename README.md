@@ -17,6 +17,17 @@ Before you begin, ensure you have met the following requirements:
 - A web server with support for PHP and CodeIgniter 4.
 - Access to a streaming service that supports RTMP.
 
+## Installation Via SH
+Run this via ssh:
+   ```bash
+   curl -s https://raw.githubusercontent.com/Subhendu1987/StreamDex/main/install.sh | sudo bash
+   ```
+1. **Update your package list and upgrade existing packages:**
+   ```bash
+   sudo apt update
+   sudo apt upgrade -y
+   ```
+
 ## Installation
 
 To install StreamDex, follow these steps:
