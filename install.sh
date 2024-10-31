@@ -129,8 +129,21 @@ rtmp {
 }
 EOL
 
-# Final Nginx restart
-echo "Restarting Nginx..."
-sudo systemctl restart nginx
+# Check if systemctl is available
+if command -v systemctl > /dev/null; then    
+    sudo systemctl restart nginx
+else
+    sudo service nginx restart
+fi
+echo "Restarting Nginx ..."
 
+# Retrieve the local IP address
+LOCAL_IP=$(hostname -I | awk '{print $1}')
+
+# Display the application URL and default credentials
+echo ""
 echo "Installation complete!"
+echo "Access the StreamDex application at: http://$LOCAL_IP"
+echo "Default Username: admin"
+echo "Default Password: 123456"
+
