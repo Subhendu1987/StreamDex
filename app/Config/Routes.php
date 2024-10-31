@@ -83,9 +83,3 @@ $routes->group('webhook', function($routes) {
     $routes->post('Musicvideo/(:any)', 'Webhook_controller::music_stop/$1');
 });
 
-$routes->get('test', 'testcontroller::chk');
-$routes->get('teststr', 'testcontroller::strt');
-$routes->get('teststp', 'testcontroller::stop');
-
-
-$routes->match(['get', 'post'], 'testdb', 'testcontroller::test');
