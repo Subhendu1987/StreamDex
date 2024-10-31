@@ -58,6 +58,7 @@ echo "Starting and enabling PHP service..."
 sudo systemctl start php8.1-fpm
 sudo systemctl enable php8.1-fpm
 
+
 # Configure Nginx
 echo "Configuring Nginx..."
 NGINX_CONFIG_PATH="/etc/nginx/sites-available/default"
