@@ -48,10 +48,46 @@ sudo apt install nginx -y
 
 # Install required PHP and FFmpeg packages
 echo "Installing PHP, FFmpeg, and other required packages..."
-sudo apt install software-properties-common -y
-sudo add-apt-repository ppa:ondrej/php -y
-sudo apt update
-sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl php8.1-mbstring -y
+
+# Update package list
+echo "Updating package list..."
+if ! sudo apt update; then
+    echo "Failed to update package list. Exiting."
+    exit 1
+fi
+
+# Install software-properties-common if it's not already installed
+if ! dpkg -l | grep -q software-properties-common; then
+    echo "Installing software-properties-common..."
+    if ! sudo apt install software-properties-common -y; then
+        echo "Failed to install software-properties-common. Exiting."
+        exit 1
+    fi
+fi
+
+# Add the PHP repository
+echo "Adding PHP repository..."
+if ! sudo add-apt-repository ppa:ondrej/php -y; then
+    echo "Failed to add PHP repository. Exiting."
+    exit 1
+fi
+
+# Update package list again after adding the new repository
+echo "Updating package list again..."
+if ! sudo apt update; then
+    echo "Failed to update package list after adding PHP repository. Exiting."
+    exit 1
+fi
+
+# Install required packages
+echo "Installing required packages: curl, ffmpeg, git, PHP 8.1 and extensions..."
+if ! sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl php8.1-mbstring -y; then
+    echo "Failed to install required packages. Exiting."
+    exit 1
+fi
+
+echo "PHP and required packages installed successfully."
+
 
 # Start and enable PHP
 echo "Starting and enabling PHP service..."
