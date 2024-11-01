@@ -47,7 +47,7 @@ sudo apt install nginx -y
 # Install required PHP and FFmpeg packages
 echo "Installing PHP, FFmpeg, and other required packages..."
 sudo apt install software-properties-common -y
-ssudo add-apt-repository ppa:ondrej/php -y
+sudo add-apt-repository ppa:ondrej/php -y 
 sudo apt update
 sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl php8.1-mbstring -y
 
@@ -113,8 +113,8 @@ sudo chmod -R 777 /var/www/html/.env
 
 # Install RTMP module for Nginx
 echo "Installing RTMP module for Nginx..."
-sudo add-apt-repository universe -y
-sudo apt install libnginx-mod-rtmp -y
+sudo add-apt-repository universe -y 
+sudo apt install libnginx-mod-rtmp -y 
 
 # Configure Nginx for RTMP streaming
 echo "Configuring Nginx for RTMP..."
