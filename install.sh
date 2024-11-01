@@ -48,7 +48,7 @@ sudo apt install nginx -y
 echo "Installing PHP, FFmpeg, and other required packages..."
 sudo apt install software-properties-common -y 
 sudo add-apt-repository ppa:ondrej/php -y 
-sudo apt update  
+# sudo apt update  
 sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl php8.1-mbstring -y 
 
 
