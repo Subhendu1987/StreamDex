@@ -52,8 +52,14 @@ sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl
 
 # Start and enable PHP
 echo "Starting and enabling PHP service..."
-sudo systemctl start php8.1-fpm
-sudo systemctl enable php8.1-fpm
+if command -v systemctl > /dev/null; then    
+    sudo systemctl start php8.1-fpm
+    sudo systemctl enable php8.1-fpm
+else
+    sudo service start php8.1-fpm
+    sudo service enable php8.1-fpm
+fi
+
 
 
 # Configure Nginx
