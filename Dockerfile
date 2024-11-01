@@ -113,6 +113,9 @@ rtmp {\n\
     }\n\
 }\n' > /etc/nginx/nginx.conf
 
+# Give write permission
+RUN chmod -R 777 /var/www/html/writable
+
 # Expose HTTP and RTMP ports
 EXPOSE 80 1935
 
