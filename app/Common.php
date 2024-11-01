@@ -125,7 +125,7 @@ function streamstartcmd($plid)
             $ffmpegCommand .= "-b:v ".$settingsinfo->video_bitrate."k ";                // Set target video bitrate
             $ffmpegCommand .= "-maxrate ".$settingsinfo->maximum_bitrate."k ";          // Set maximum bitrate
             $ffmpegCommand .= "-bufsize ".$settingsinfo->buffer_size."k ";              // Set buffer size
-            $ffmpegCommand .= "-vf 'scale=".$Resulationinfo->str_resulution_width.":".$Resulationinfo->str_resulution_height."' ";  // Set video resolution
+            $ffmpegCommand .= "-vf 'scale=".$Resulationinfo->str_resulution_height.":".$Resulationinfo->str_resulution_width."' ";  // Set video resolution
             $ffmpegCommand .= "-c:a aac ";                                              // Use AAC audio codec
             $ffmpegCommand .= "-b:a ".$settingsinfo->audio_bitrate."k ";                // Set audio bitrate to 128 kbps
             $ffmpegCommand .= "-ar ".$settingsinfo->audio_sample_rate." ";              // Set audio sample rate to 44.1 kHz
