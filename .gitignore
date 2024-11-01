@@ -30,3 +30,4 @@ composer.lock
 
 # Ignore this .gitignore file
 .gitignore
+DexCorp/
