@@ -339,12 +339,11 @@ function createstreamlink($keyforlocal, $rtmp)
 {
     global $activeStreams; // Access the global variable
     $results = [];
-    $localStreamUrl = "rtmp://".str_replace(array('http://', 'https://'),'',base_url())."live/{$keyforlocal}";
-    // $localStreamUrl = "rtmp://".trim(shell_exec("hostname -i"))."/live/{$keyforlocal}";
+     $localStreamUrl = "rtmp://localhost/live/{$keyforlocal}";
 
     foreach ($rtmp as $url) {
         // Construct the FFmpeg command
-        $command = "ffmpeg -i $localStreamUrl -c copy -f flv {$url} > /dev/null 2>&1 & echo $!";
+        $command = "ffmpeg -re -i $localStreamUrl -c copy -f flv {$url} > /dev/null 2>&1 & echo $!";
         
         // Execute the command and get the PID
         exec($command, $output, $return_var);
