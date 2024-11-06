@@ -108,7 +108,7 @@ function streamstartcmd($plid)
 
         if(!empty($mediainfo) && !empty($linkinfo)){
             // Initialize the FFmpeg command
-            $ffmpegCommand = "ffmpeg -re ";
+            $ffmpegCommand = "ffmpeg -re -fflags +genpts ";
 
             // Handle looping logic
             if ($Playlistinfo->is_looped == 1) {
@@ -132,13 +132,9 @@ function streamstartcmd($plid)
             $ffmpegCommand .= "-g ".$settingsinfo->keyframes." ";                       // Set GOP size for keyframes (1 keyframe every 60 frames)
             $ffmpegCommand .= "-threads ".$settingsinfo->CPUthreads." ";                // Use specified CPU threads for encoding
 
-            // Add RTMP stream output links
-            foreach ($linkinfo as $link) {
-                $rtmp[]=rtrim($link['rtmp_link'], '/') . "/" . $link['rtmp_key'];
-            }
+
             
-            $ffmpegCommand .= "-f flv rtmp://".str_replace(array('http://', 'https://'),'',base_url())."live/{$Playlistinfo->uniq_identity} ". " ";
-            // $ffmpegCommand .= "-f flv rtmp://".trim(shell_exec("hostname -i"))."/live/{$Playlistinfo->uniq_identity} ". " ";
+            $ffmpegCommand .= "-f flv rtmp://localhost/live/{$Playlistinfo->uniq_identity} ". " ";
             
     
             $db->query("UPDATE Playlist SET status = 1 WHERE id = ".$plid); 
@@ -146,9 +142,15 @@ function streamstartcmd($plid)
             if($Playlistinfo->is_looped != 1){
                 $ffmpegCommand = "nohup sh -c \" " .$ffmpegCommand." && curl -X POST '".base_url('webhook/video/')."".$Playlistinfo->uniq_identity."'\" > /dev/null 2>&1 & disown";
             }else{
-                $ffmpegCommand .= " > /dev/null 2>&1 &";
+                $ffmpegCommand .= " > /dev/null 2>&1 &";                                
             }
-            createstreamlink($Playlistinfo->uniq_identity, $rtmp);
+            // Add RTMP stream output links
+            foreach ($linkinfo as $link) {
+                $localStreamUrl = "rtmp://localhost/live/{$Playlistinfo->uniq_identity}";
+                $rtmplink = rtrim($link['rtmp_link'], '/') . "/" . $link['rtmp_key'];
+                $strmcret = "ffmpeg -re -i $localStreamUrl -c copy -f flv {$rtmplink} > /dev/null 2>&1 & echo $!";
+                exec($strmcret);
+            }
             exec(trim($ffmpegCommand));
             return trim($ffmpegCommand);
         } 
@@ -192,7 +194,7 @@ function startMVCommand($musicVideoId) {
     }
 
     // Prepare the FFmpeg command
-    $command = "ffmpeg -re ";
+    $command = "ffmpeg -re -fflags +genpts ";
 
     // Video input
     $videoPath = $musicVideo->video_path;
@@ -268,21 +270,28 @@ function startMVCommand($musicVideoId) {
     $command .= "-g " . $settingsinfo->keyframes . " ";
     $command .= "-threads " . $settingsinfo->CPUthreads . " ";
 
+    
+    
+    $uniqueTag = $musicVideo->uniq_identity;  
+
+    $command .= "-f flv rtmp://localhost/live/{$uniqueTag} ";
+
+    if($musicVideo->is_loop != 1){
+        
+        $command = "nohup sh -c ' " . $command . " && curl -X POST \"" . base_url('webhook/Musicvideo/') . $uniqueTag . "\"' > /dev/null 2>&1 & disown";
+    }else{
+        $command .= " > /dev/null 2>&1 &";                                
+    }
+
+
     // RTMP stream link and key
     foreach ($musicLink as $streamLink) {
-        $rtmp[] = rtrim($streamLink['mv_link'], '/') . "/" . $streamLink['mv_key'];
+        $localStreamUrl = "rtmp://localhost/live/{$uniqueTag}";
+        $rtmplink = rtrim($streamLink['mv_link'], '/') . "/" . $streamLink['mv_key'];
+        $strmcret = "ffmpeg -re -i $localStreamUrl -c copy -f flv {$rtmplink} > /dev/null 2>&1 & echo $!";
+        exec($strmcret);
     }
-    
-    $uniqueTag = $musicVideo->uniq_identity;
-    
-    // Adjust the shell command to use single quotes on the outside, and double quotes on the inside
-    $command .= "-f flv rtmp://".str_replace(array('http://', 'https://'), '', base_url())."live/{$uniqueTag} ";
-    $command = "nohup sh -c ' " . $command . " && curl -X POST \"" . base_url('webhook/Musicvideo/') . $uniqueTag . "\"' > /dev/null 2>&1 & disown";
-    
-    createstreamlink($uniqueTag, $rtmp);
 
-    
-    
     exec(trim($command));
     
     // Update stream status
@@ -335,50 +344,4 @@ function stopMVCommand($musicVideoId) {
 }
 
 
-function createstreamlink($keyforlocal, $rtmp)
-{
-    global $activeStreams; // Access the global variable
-    $results = [];
-     $localStreamUrl = "rtmp://localhost/live/{$keyforlocal}";
-
-    foreach ($rtmp as $url) {
-        // Construct the FFmpeg command
-        $command = "ffmpeg -re -i $localStreamUrl -c copy -f flv {$url} > /dev/null 2>&1 & echo $!";
-        
-        // Execute the command and get the PID
-        exec($command, $output, $return_var);
-        $pid = (int) $output[0]; // Get the last output line, which is the PID
-
-        // Store the result for logging or debugging
-        $results[] = [
-            'url' => $url,
-            'success' => $return_var === 0, // Check if command was successful
-            'output' => $output,
-            'pid' => $pid // Store PID for later use
-        ];
-
-        // Add PID to active streams under the corresponding key
-        $activeStreams[$keyforlocal][] = $pid;
-    }
-
-    return json_encode(['status' => 'success', 'message' => 'Streams created successfully.', 'results' => $results]);
-}
-
-function stopStream($keyforlocal)
-{
-    global $activeStreams; // Access the global variable
-
-    if (!isset($activeStreams[$keyforlocal])) {
-        return json_encode(['status' => 'error', 'message' => 'No active streams found for this key.']);
-    }
-
-    foreach ($activeStreams[$keyforlocal] as $pid) {
-        exec("kill -9 $pid"); // Forcefully kill the process
-    }
-
-    // Remove the stopped streams from the active streams list
-    unset($activeStreams[$keyforlocal]);
-
-    return json_encode(['status' => 'success', 'message' => 'Streams stopped successfully.']);
-}
 
