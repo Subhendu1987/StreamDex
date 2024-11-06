@@ -18,7 +18,8 @@
       </div>
       <form class="needs-validation" id="deletePlaylistForm" novalidate>
       <input type="hidden" id="streamdeleteid" >
-      <div class="modal-footer">
+      <div class="modal-footer d-flex justify-content-between">
+        <lebel><strong><?=esc (aboutdetails()['sitedetails']['Name'])?></strong> : <?=esc (aboutdetails()['version'])?></Lebel>
         <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>        
       </div>
       </form>
