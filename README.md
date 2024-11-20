@@ -85,6 +85,11 @@ To install StreamDex, follow these steps:
    }
    ```
 
+6. **Empty Nginx Directry:**
+   ```bash
+   cd /var/www/html/
+   
+   ```
 6. **Restart Nginx:**
    ```bash
    sudo systemctl restart nginx

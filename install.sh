@@ -1,7 +1,8 @@
+#!/bin/bash
 clear
 echo -e "\e[0m\c"
 
-# shellcheck disable=SC2016
+# ASCII Logo
 echo "
    _____ _                            _____            
   / ____| |                          |  __ \           
@@ -11,61 +12,43 @@ echo "
  |_____/ \__|_|  \___|\__,_|_| |_| |_|_____/ \___/_/\_\ 
         --- Created with Love for YOU ---
 "
-export PATH=/usr/sbin:$PATH
-export DEBIAN_FRONTEND=noninteractive
-
-set -e
 
 echo "
 ###############################################################################
-#                                GLOBALS                                      #
-#           StreamDex Installer Script v1.0.0
+#           StreamDex Installer Script v2.0.0
 #   GitHub: https://github.com/Subhendu1987/StreamDex
 #   Issues: https://github.com/Subhendu1987/StreamDex/issues
-#   Requires: bash, mv, rm, curl/wget, nginx, php8.1, ffmpeg
-#
-#   This script installs StreamDex to your system.
-#   Usage:
-#
-#   $ wget -qO- https://raw.githubusercontent.com/Subhendu1987/StreamDex/main/install.sh | bash
-#         or
-#   $ curl -fsSL https://raw.githubusercontent.com/Subhendu1987/StreamDex/main/install.sh | bash
-#
-#   This only works on Debian-based Linux systems. Please
-#   open an issue if you notice any bugs.
+#   Requirements: bash, curl/wget, nginx, php8.1, ffmpeg, cloudflared
 ###############################################################################
 "
-# Update and upgrade the package list
+
+export PATH=/usr/sbin:$PATH
+export DEBIAN_FRONTEND=noninteractive
+set -e
+
+# Update and upgrade the system
 echo "Updating package list and upgrading existing packages..."
 sudo apt update && sudo apt upgrade -y
+
 
 # Install Nginx
 echo "Installing Nginx..."
 sudo apt install nginx -y
 
+# Install PHP and other dependencies
+echo "Installing PHP, FFmpeg, and required dependencies..."
+sudo apt install software-properties-common -y
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
+sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl php8.1-mbstring -y
 
-# Install required PHP and FFmpeg packages
-echo "Installing PHP, FFmpeg, and other required packages..."
-sudo apt install software-properties-common -y 
-sudo add-apt-repository ppa:ondrej/php -y 
-sudo apt update  
-sudo apt install curl ffmpeg git php8.1-fpm php8.1-sqlite3 php8.1-gd php8.1-intl php8.1-mbstring -y 
-
-
-# Start and enable PHP
+# Start and enable PHP service
 echo "Starting and enabling PHP service..."
-if command -v systemctl > /dev/null; then    
-    sudo systemctl start php8.1-fpm
-    sudo systemctl enable php8.1-fpm
-else
-    sudo service start php8.1-fpm
-    sudo service enable php8.1-fpm
-fi
+sudo systemctl start php8.1-fpm
+sudo systemctl enable php8.1-fpm
 
-
-
-# Configure Nginx
-echo "Configuring Nginx..."
+# Configure Nginx for StreamDex
+echo "Configuring Nginx for StreamDex..."
 NGINX_CONFIG_PATH="/etc/nginx/sites-available/default"
 sudo tee $NGINX_CONFIG_PATH > /dev/null <<EOL
 server {
@@ -93,35 +76,22 @@ server {
 }
 EOL
 
-# Restart Nginx
-echo "Restarting Nginx..."
-if command -v systemctl > /dev/null; then    
-    sudo systemctl restart nginx
-else
-    sudo service nginx restart
-fi
+sudo systemctl restart nginx
 
-# Clone the StreamDex repository
-echo "Cloning StreamDex repository..."
-cd /var/www/html
-sudo git clone https://github.com/Subhendu1987/StreamDex.git .
-
-# Set writable permissions
-echo "Setting writable permissions..."
+# Set up StreamDex
+echo "Setting up StreamDex..."
+sudo rm -rf /var/www/html
+sudo mkdir -p /var/www/html
+sudo git clone https://github.com/Subhendu1987/StreamDex.git /var/www/html/
 sudo chmod -R 777 /var/www/html/writable
 sudo chmod -R 777 /var/www/html/.env
 
-# Install RTMP module for Nginx
-echo "Installing RTMP module for Nginx..."
-sudo add-apt-repository universe -y 
-sudo apt install libnginx-mod-rtmp -y 
+# Install and configure RTMP module
+echo "Installing and configuring RTMP module for Nginx..."
+sudo add-apt-repository universe -y
+sudo apt install libnginx-mod-rtmp -y
 
-# Configure Nginx for RTMP streaming
-echo "Configuring Nginx for RTMP..."
-sudo chown www-data:www-data /etc/nginx/nginx.conf
-sudo chmod 664 /etc/nginx/nginx.conf
 NGINX_MAIN_CONFIG="/etc/nginx/nginx.conf"
-
 sudo tee $NGINX_MAIN_CONFIG > /dev/null <<EOL
 user www-data;
 worker_processes auto;
@@ -177,20 +147,12 @@ rtmp {
 }
 EOL
 
-# Restart Nginx again
-echo "Restarting Nginx again..."
-if command -v systemctl > /dev/null; then    
-    sudo systemctl restart nginx
-else
-    sudo service nginx restart
-fi
+sudo systemctl restart nginx
 
-# Retrieve the local IP address
+# Display installation completion message
 LOCAL_IP=$(hostname -I | awk '{print $1}')
-
-# Display the application URL and default credentials
 echo ""
 echo "Installation complete!"
-echo "Access the StreamDex application at: http://$LOCAL_IP"
+echo "Access StreamDex at: http://$LOCAL_IP"
 echo "Default Username: admin"
 echo "Default Password: 123456"
